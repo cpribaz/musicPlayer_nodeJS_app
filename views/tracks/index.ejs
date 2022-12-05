@@ -1,0 +1,22 @@
+<h2>Search Tracks</h2>
+<form action="/tracks" method="GET">
+<div>
+    <label>Name</label>
+    <input type="text" name="track_title" value="<% searchOptions.track_title %>">
+</div>
+<div>
+    <label>Published After</label>
+    <input type="date" name="publishedAfter" value="<% searchOptions.publishedAfter %>">
+</div>
+<div>
+    <label>Published Before</label>
+    <input type="date" name="publishedBefore" value="<% searchOptions.publishedBefore %>">
+</div>
+    <button type="submit">Search</button>
+</form>
+<br>
+<div>
+    <% tracks.forEach(track => { %>
+        <div><%= track.track_title %></div>
+    <% }) %>
+</div>

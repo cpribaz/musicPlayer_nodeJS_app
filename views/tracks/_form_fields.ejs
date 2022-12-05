@@ -15,6 +15,30 @@
     </select>
 </div>
 <div>
+    <label>Albums</label>
+    <select name="album">
+    <% albums.forEach(album => { %>
+        <% if (album.id === track.album) { %>
+            <option selected label="<%= album.name %>" value="<%= album.id %>">
+        <% } else { %>
+            <option label="<%= album.name %>" value="<%= album.id %>">
+        <% } %>
+    <% }) %>
+    </select>
+</div>
+<div>
+    <label>Genre</label>
+    <select name="genre">
+    <% genres.forEach(genre => { %>
+        <% if (genre.id === track.genre) { %>
+            <option selected label="<%= genre.name %>" value="<%= genre.id %>">
+        <% } else { %>
+            <option label="<%= genre.name %>" value="<%= genre.id %>">
+        <% } %>
+    <% }) %>
+    </select>
+</div>
+<div>
     <label>Publish Date</label>
     <input type="date" name="publishDate" 
         value="<%= track.publishDate == null ? '' : 

@@ -11,6 +11,8 @@ const indexRouter = require('./routes/index');
 const playlistRouter = require('./routes/playlists');
 const trackRouter = require('./routes/tracks');
 const artistRouter = require('./routes/artists');
+const albumRouter = require('./routes/albums');
+const genreRouter = require('./routes/genres');
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
@@ -29,5 +31,7 @@ app.use('/', indexRouter);
 app.use('/playlists', playlistRouter);
 app.use('/tracks', trackRouter);
 app.use('/artists', artistRouter);
+app.use('/albums', albumRouter);
+app.use('/genres', genreRouter);
 
 app.listen(process.env.PORT || 3000);

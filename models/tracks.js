@@ -11,12 +11,14 @@ const trackSchema = new mongoose.Schema({
         ref: 'Artist' 
     },
     album_title: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Album' 
     },
     track_genres: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Genre' 
     },
     createdAt: {
         type: Date,
