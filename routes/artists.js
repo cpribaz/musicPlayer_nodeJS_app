@@ -5,11 +5,11 @@ const router = express.Router();
 //all artists route
 router.get('/', async (req, res) =>{
     let searchOptions = {}
-    if (req.query.name != null && req.query.name !== '') {
-        searchOptions.name = new RegExp(req.query.name, 'i');
+    if (req.query.artist_name != null && req.query.artist_name !== '') {
+        searchOptions.artist_name = new RegExp(req.query.artist_name, 'i');
     }
     try{
-        const artists = await Artist.find(searchOptions);
+        const artists = await Artist.find(searchOptions).limit(20);
         res.render('artists/index', {
             artists: artists, 
             searchOptions: req.query
@@ -27,7 +27,7 @@ router.get('/new', (req, res) => {
 //create artist
 router.post('/', async (req, res) => {
     const artist = new Artist({
-        name: req.body.name
+        artist_name: req.body.artist_name
     })
     try{
         const newArtist = await artist.save()

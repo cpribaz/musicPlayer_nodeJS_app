@@ -5,11 +5,11 @@ const router = express.Router();
 //all genres route
 router.get('/', async (req, res) =>{
     let searchOptions = {}
-    if (req.query.name != null && req.query.name !== '') {
-        searchOptions.name = new RegExp(req.query.name, 'i');
+    if (req.query.title != null && req.query.title !== '') {
+        searchOptions.title = new RegExp(req.query.title, 'i');
     }
     try{
-        const genres = await Genre.find(searchOptions);
+        const genres = await Genre.find(searchOptions).limit(20);
         res.render('genres/index', {
             genres: genres, 
             searchOptions: req.query
@@ -27,7 +27,7 @@ router.get('/new', (req, res) => {
 //create genre
 router.post('/', async (req, res) => {
     const genre = new Genre({
-        name: req.body.name
+        title: req.body.title
     })
     try{
         const newGenre = await genre.save()

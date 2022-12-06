@@ -5,11 +5,11 @@ const router = express.Router();
 //all albums route
 router.get('/', async (req, res) =>{
     let searchOptions = {}
-    if (req.query.name != null && req.query.name !== '') {
-        searchOptions.name = new RegExp(req.query.name, 'i');
+    if (req.query.album_title != null && req.query.album_title !== '') {
+        searchOptions.album_title = new RegExp(req.query.album_title, 'i');
     }
     try{
-        const albums = await Album.find(searchOptions);
+        const albums = await Album.find(searchOptions).limit(20);
         res.render('albums/index', {
             albums: albums, 
             searchOptions: req.query
@@ -27,7 +27,7 @@ router.get('/new', (req, res) => {
 //create album
 router.post('/', async (req, res) => {
     const album = new Album({
-        name: req.body.name
+        album_title: req.body.album_title
     })
     try{
         const newAlbum = await album.save()

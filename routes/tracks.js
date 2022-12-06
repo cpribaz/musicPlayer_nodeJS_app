@@ -18,7 +18,7 @@ router.get('/', async (req, res) =>{
         query = query.gte('createdAt', req.query.publishedAfter)
     }
     try{
-        const tracks = await query.exec();
+        const tracks = await query.limit(20).exec();
         res.render('tracks/index', {
             tracks: tracks, 
             searchOptions: req.query

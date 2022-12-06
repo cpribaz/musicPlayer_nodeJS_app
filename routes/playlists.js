@@ -9,7 +9,7 @@ router.get('/', async (req, res) =>{
         searchOptions.name = new RegExp(req.query.name, 'i');
     }
     try{
-        const playlists = await Playlist.find(searchOptions);
+        const playlists = await Playlist.find(searchOptions).limit(20);
         res.render('playlists/index', {
             playlists: playlists, 
             searchOptions: req.query
