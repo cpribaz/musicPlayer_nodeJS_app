@@ -7,4 +7,5 @@
 <br>
 <% artists.forEach(artist => { %>
     <div><%= artist.artist_name %></div>
+    <a href="/artists/<%= artist.id %>">View</a>
 <% }) %>
