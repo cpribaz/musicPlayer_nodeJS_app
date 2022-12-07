@@ -7,7 +7,9 @@
 <br>
 <% playlists.forEach(playlist => { %>
     <div><%= playlist.name %></div>
-    <a href="/playlists/<%= playlist.id %>">View</a>
-    <a href="/playlists/<%= playlist.id %>/edit">Edit</a>
-    <%- include('../partials/deleteForm', {url: `/playlists/${playlist.id}`}) %>
+    <div class="btn-row">
+        <a class="btn btn-primary" href="/playlists/<%= playlist.id %>">View</a>
+        <a class="btn btn-primary" href="/playlists/<%= playlist.id %>/edit">Edit</a>
+        <%- include('../partials/deleteForm', {url: `/playlists/${playlist.id}`}) %>
+    </div>
 <% }) %>
