@@ -1,0 +1,6 @@
+<h2>Edit Playlist</h2>
+<form action="/playlists/<%= playlist.id %>?_method=PUT" method="POST">
+    <%- include('_form_fields') %> 
+    <a href="/playlists/<%= playlist.id %>">Cancel</a>
+    <button type="submit">Update</button>
+</form>
