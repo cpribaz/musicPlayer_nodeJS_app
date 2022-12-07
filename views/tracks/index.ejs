@@ -18,5 +18,6 @@
 <div>
     <% tracks.forEach(track => { %>
         <div><%= track.track_title %></div>
+        <a href="/tracks/<%= track.id %>">View</a>
     <% }) %>
 </div>

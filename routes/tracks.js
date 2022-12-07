@@ -52,6 +52,18 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const track = await Track.findById(req.params.id);
+        res.render('tracks/show', {
+            track: track,
+        });
+    } catch (err){
+        console.log(err);
+        res.redirect('/');
+    }
+});
+
 async function renderNewPage(res, track, hasError = false){
     try{
         const artists = await Artist.find({});

@@ -6,24 +6,25 @@ const trackSchema = new mongoose.Schema({
         required: true
     },
     artist_name: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Artist' 
+        type: String,
+        required: true 
     },
     album_title: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Album' 
+        type: String,
+        required: true, 
     },
     track_genres: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Genre' 
+        type: String,
+        required: true, 
     },
     createdAt: {
         type: Date,
-        required: true,
+        required: false,
         default: Date.now
+    },
+    track_date_created: {
+        type: String,
+        required: false
     }
 });
 
