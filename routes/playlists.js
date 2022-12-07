@@ -41,4 +41,51 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.get('/:id', (req, res) => {
+    res.send('Show playlist ' + req.params.id);
+});
+
+router.get('/:id/edit', async (req, res) => {
+    try{
+        const playlist = Playlist.findById(req.params.id);
+        res.render('playlists/edit', {playlist: playlist});
+    } catch {
+        res.redirect('/playlists');
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    let playlist
+    try{
+        playlist = await Playlist.findById(req.params.id)
+        playlist.name = req.body.name
+        await playlist.save()
+        res.redirect(`/playlists/${playlist.id}`)
+    } catch {
+        if ( playlist == null ) {
+            res.redirect('/')
+        } else{
+            res.render('playlists/edit', {
+                playlist: playlist, 
+                errorMessage: 'Error updating playlist'
+            })
+        }
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    let playlist
+    try{
+        playlist = await Playlist.findById(req.params.id);
+        await playlist.remove();
+        res.redirect('/playlists');
+    } catch {
+        if ( playlist == null ) {
+            res.redirect('/')
+        } else{
+            res.redirect(`/playlists/${playlist.id}`)
+        }
+    }
+})
+
 module.exports = router;
