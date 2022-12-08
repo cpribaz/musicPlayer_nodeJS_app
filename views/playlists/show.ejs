@@ -1,9 +1,6 @@
 <h2><%= playlist.name %></h2>
-<a href="/playlists/<%= playlist.id %>/edit">Edit</a>
-<%- include('../partials/deleteForm', {url: `/playlists/${playlist.id}`}) %>
-<% if (tracksInPlaylist.length > 0){ %>
-    <h2>Tracks In <%= playlist.name %> </h2>
-    <% tracksInPlaylist.forEach(track => { %>
-        <div><%= track.track_title %></div>
-    <% }) %>
-<% } %>
+
+<div class="form-row">
+        <a class="btn btn-primary" href="/playlists/<%= playlist.id %>/edit">Edit</a>
+        <%- include('../partials/deleteForm', {url: `/playlists/${playlist.id}`}) %>
+</div>
