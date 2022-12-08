@@ -15,7 +15,7 @@ router.get('/', async (req, res) =>{
         query = query.regex('artist_name', req.query.artist_name)
     }
     if(req.query.track_genres != null && req.query.track_genres != '') {
-        query = query.gte('track_genres', req.query.track_genres)
+        query = query.regex('track_genres', req.query.track_genres)
     }
     try{
         const tracks = await query.limit(20).exec();
