@@ -1,5 +1,6 @@
 const express = require('express');
 const Artist = require('../models/artist');
+const Track = require('../models/tracks');
 const router = express.Router();
 
 //all artists route
@@ -31,8 +32,7 @@ router.post('/', async (req, res) => {
     })
     try{
         const newArtist = await artist.save()
-        // res.redirect(`artists/${newArtist.id}`)
-        res.redirect('artists');
+        res.redirect(`artists/${newArtist.id}`)
     } catch {
         res.render('artists/new', {
             artist: artist, 
@@ -40,5 +40,20 @@ router.post('/', async (req, res) => {
         });
     }
 });
+
+router.get('/:id', async (req, res) => {
+    try{
+        const artist = await Artist.findById(req.params.id);
+        const tracks = await Track.find({artist: artist.id}).limit(15).exec();
+        res.render('artists/show', {
+            artist: artist,
+            tracksByArtist: tracks
+        });
+    } catch(err) {
+        console.log(err);
+        res.redirect('/');
+    }
+});
+
 
 module.exports = router;

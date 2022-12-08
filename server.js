@@ -6,6 +6,7 @@ const express = require('express');
 const app = express();
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
+
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const flash = require('express-flash');
@@ -36,6 +37,7 @@ const userSchema = new mongoose.Schema({
 })
 */
 //module.exports = user = mongoose.model('user',userSchema);
+const methodOverride = require('method-override');
 
 const indexRouter = require('./routes/index');
 const playlistRouter = require('./routes/playlists');
@@ -59,6 +61,7 @@ app.use(session({
 }))
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride('_method'));
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true});

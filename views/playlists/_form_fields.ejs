@@ -1,2 +1,17 @@
-<label>Name</label>
-<input type="text" name="name" value="<%= playlist.name %>">
+<div class="form-row">
+    <div class="form-item">
+        <label>Name</label>
+        <input type="text" name="name" value="<%= playlist.name %>">
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-item">
+        <label>Description</label>
+        <textarea name="description"><%= playlist.description %></textarea>
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-item">
+        <a class="btn btn-primary" href="">Add Tracks</a>
+    </div>
+</div>

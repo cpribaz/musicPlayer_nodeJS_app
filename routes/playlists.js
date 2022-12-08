@@ -1,5 +1,6 @@
 const express = require('express');
 const Playlist = require('../models/playlist');
+const Track = require('../models/tracks');
 const router = express.Router();
 
 //all playlists route
@@ -9,7 +10,7 @@ router.get('/', async (req, res) =>{
         searchOptions.name = new RegExp(req.query.name, 'i');
     }
     try{
-        const playlists = await Playlist.find(searchOptions).limit(20);
+        const playlists = await Playlist.find(searchOptions).limit(25);
         res.render('playlists/index', {
             playlists: playlists, 
             searchOptions: req.query
@@ -21,24 +22,91 @@ router.get('/', async (req, res) =>{
 
 //display playlists page route 
 router.get('/new', (req, res) => {
-    res.render('playlists/new', {playlist: new Playlist() });
+    renderNewPage(res, new Playlist());
 });
 
 //create playlist
 router.post('/', async (req, res) => {
     const playlist = new Playlist({
-        name: req.body.name
-    })
+        name: req.body.name,
+        description: req.body.description,
+        tracks: req.body.tracks
+    });
     try{
         const newPlaylist = await playlist.save()
-        // res.redirect(`playlists/${newPlaylist.id}`)
-        res.redirect('playlists');
+        res.redirect(`playlists/${newPlaylist.id}`);
     } catch {
-        res.render('playlists/new', {
-            playlist: playlist, 
-            errorMessage: 'Error creating playlist'
-        });
+        renderNewPage(res, playlist, true);
     }
 });
+
+router.get('/:id', async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id);
+        res.render('playlists/show', {
+            playlist: playlist,
+        });
+    } catch (err){
+        console.log(err);
+        res.redirect('/');
+    }
+});
+
+router.get('/:id/edit', async (req, res) => {
+    try{
+        const playlist = Playlist.findById(req.params.id);
+        res.render('playlists/edit', {playlist: playlist});
+    } catch {
+        res.redirect('/playlists');
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    let playlist
+    try{
+        playlist = await Playlist.findById(req.params.id)
+        playlist.name = req.body.name
+        await playlist.save()
+        res.redirect(`/playlists/${playlist.id}`)
+    } catch {
+        if ( playlist == null ) {
+            res.redirect('/')
+        } else{
+            res.render('playlists/edit', {
+                playlist: playlist, 
+                errorMessage: 'Error updating playlist'
+            })
+        }
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    let playlist
+    try{
+        playlist = await Playlist.findById(req.params.id);
+        await playlist.remove();
+        res.redirect('/playlists');
+    } catch {
+        if ( playlist == null ) {
+            res.redirect('/')
+        } else{
+            res.redirect(`/playlists/${playlist.id}`)
+        }
+    }
+});
+
+async function renderNewPage(res, playlist, hasError = false) {
+    try{
+        const tracks = await Track.find({});
+        const params = {
+            tracks: tracks,
+            playlist, playlist
+        }
+        if (hasError) params.errorMessage = 'Error creating playlist';
+        res.render('playlists/new', params);
+    }catch{
+        res.redirect('/playlists');
+    }
+}
 
 module.exports = router;
