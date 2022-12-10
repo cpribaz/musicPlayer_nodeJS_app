@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session')
+require('./passport-config')
 
 const initializePassport = require('./passport-config');
 initializePassport(passport, 
@@ -75,6 +76,7 @@ app.use('/tracks', checkAuthenticated, trackRouter);
 app.use('/artists', checkAuthenticated, artistRouter);
 app.use('/albums', checkAuthenticated, albumRouter);
 app.use('/genres',checkAuthenticated, genreRouter);
+app.use('/profile', checkAuthenticated)
 
 app.get('/login', (req, res) => {
     res.render('login.ejs');
@@ -104,6 +106,43 @@ app.post('/register', async (req, res) => {
         res.redirect('/register');        
     }
 })
+
+app.get('/profile', (req, res) => {
+    res.render('profile.ejs');
+})
+
+app.post('/profile', passport.authenticate('local', {
+    successRedirect: '/updateProfile',
+    failureRedirect: '/profile',
+    failureFlash: true
+}))
+
+app.get('/updateProfile', (req, res) => {
+    res.render('updateProfile.ejs');
+})
+
+app.post('/updateProfile', async (req, res) => {
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        users.find(id)
+        users.push({
+            id: Date.now().toString(),
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword
+        });
+        res.redirect('/profile');
+    } catch{
+        res.redirect('/profile');        
+    }
+})
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email']}));
+
+app.get('/auth/google/callback', passport.authenticate( 'google', {
+   successRedirect: '/home',
+   failureRedirect: '/login'
+}));
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()){
