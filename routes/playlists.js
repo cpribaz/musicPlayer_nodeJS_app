@@ -1,5 +1,6 @@
 const express = require('express');
 const Playlist = require('../models/playlist');
+const tracks = require('../models/tracks');
 const Track = require('../models/tracks');
 const router = express.Router();
 
@@ -110,6 +111,44 @@ router.put('/:id/review', async (req, res) => {
         }
     }
 });
+
+router.get('/:id/addTracks', async (req, res) => {
+    try{
+        const playlist = await Playlist.findById(req.params.id);
+        res.render('playlists/addTracks', {playlist: playlist});
+    } catch {
+        res.redirect('/playlists');
+    }
+});
+
+router.put('/:id/addTracks', async (req, res) => {
+    let trackName = req.body.tracks
+    let playlist
+    try {
+        playlist = await Playlist.findById(req.params.id)
+        addTracks(trackName, playlist);
+        res.redirect(`/playlists/${playlist.id}`)
+    } catch {
+        if(playlist == null){
+            res.redirect('/')
+        }else{
+            res.render('playlists/edit', {
+                playlist: playlist,
+                errorMessage: 'Error creating review'
+            })
+        }
+    }
+});
+
+
+async function addTracks(trackName, playlist){
+    const track = await Track.findOne({track_title: trackName});
+    if (track){
+        playlist.tracks.push(track);
+        await playlist.save()
+    } else {}
+}
+
 
 router.delete('/:id', async (req, res) => {
     let playlist

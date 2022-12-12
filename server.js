@@ -126,9 +126,21 @@ app.post('/updateProfile', async (req, res) => {
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email']}));
 
 app.get('/auth/google/callback', passport.authenticate( 'google', {
-   successRedirect: '/home',
-   failureRedirect: '/login'
+    successRedirect: '/home',
+    failureRedirect: '/login'
 }));
+
+app.get('/privacyPolicy', checkAuthenticated, (req, res) => {
+    res.render('privacyPolicy.ejs');
+})
+
+app.get('/acceptableUse', checkAuthenticated, (req, res) => {
+    res.render('acceptableUse.ejs');
+})
+
+app.get('/dmcaNotice', checkAuthenticated, (req, res) => {
+    res.render('dmcaNotice.ejs');
+})
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()){

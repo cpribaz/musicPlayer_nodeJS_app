@@ -28,10 +28,9 @@ function initialize(passport, getUserByEmail, getUserById) {
         callbackURL: process.env.GOOGLE_CALLBACK_URL,
         passReqToCallback   : true
     },  function(request, accessToken, refreshToken, profile, done) {
-        console.log(profile)
         return done(null, profile);
-      }
-      ))
+    }
+))
 
     passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((user, done) => done(null, user));

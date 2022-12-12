@@ -10,9 +10,8 @@ const playlistSchema = new mongoose.Schema({
         required: false
     },
     tracks: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Array,
         required: false,
-        ref: 'Artist'
     },
     lastModified: {
         type: Date,
