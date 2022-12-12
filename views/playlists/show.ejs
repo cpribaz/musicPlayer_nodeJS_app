@@ -1,6 +1,12 @@
 <h2><%= playlist.name %></h2>
 
 <div class="form-row">
+        <a class="btn btn-primary" href="/playlists/<%= playlist.id %>/review">Add Rating</a>
         <a class="btn btn-primary" href="/playlists/<%= playlist.id %>/edit">Edit</a>
-        <%- include('../partials/deleteForm', {url: `/playlists/${playlist.id}`}) %>
 </div>
+<div>Description: <%= playlist.description %></div>
+<div>Privacy: <%= playlist.privacy %></div>
+<div>Last Modified: <%= playlist.lastModified %></div>
+<h4>Reviews</h4>
+<div>Comment: <%= playlist.comment %></div>
+<div>Rating: <%= playlist.rating %></div>

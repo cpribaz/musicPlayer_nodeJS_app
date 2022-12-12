@@ -15,7 +15,6 @@
     <div><%= playlist.name %></div>
     <div class="btn-row">
         <a class="btn btn-primary" href="/playlists/<%= playlist.id %>">View</a>
-        <a class="btn btn-primary" href="/playlists/<%= playlist.id %>/edit">Edit</a>
         <%- include('../partials/deleteForm', {url: `/playlists/${playlist.id}`}) %>
     </div>
 <% }) %>
