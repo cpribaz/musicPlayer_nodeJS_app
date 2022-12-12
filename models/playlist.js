@@ -11,7 +11,7 @@ const playlistSchema = new mongoose.Schema({
     },
     tracks: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        required: false,
         ref: 'Artist'
     },
     lastModified: {
@@ -23,6 +23,14 @@ const playlistSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: "private"
+    }, 
+    comment: {
+        type: String,
+        required: false
+    }, 
+    rating: {
+        type: Number, 
+        required: false
     }
 });
 

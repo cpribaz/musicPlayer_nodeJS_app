@@ -14,30 +14,13 @@ const session = require('express-session')
 require('./passport-config')
 
 const initializePassport = require('./passport-config');
-initializePassport(passport, 
+initializePassport(
+    passport, 
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
 );
+let users = [];
 
-const users = [];
-/*
-const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    password:{
-        type: String,
-        required: true,
-        minlength: 8
-    },
-    name:{
-        type: String
-    }
-})
-*/
-//module.exports = user = mongoose.model('user',userSchema);
 const methodOverride = require('method-override');
 
 const indexRouter = require('./routes/index');
@@ -78,6 +61,8 @@ app.use('/albums', checkAuthenticated, albumRouter);
 app.use('/genres',checkAuthenticated, genreRouter);
 app.use('/profile', checkAuthenticated)
 
+const User = require('./models/user');
+
 app.get('/login', (req, res) => {
     res.render('login.ejs');
 })
@@ -94,15 +79,16 @@ app.get('/register', (req, res) => {
 
 app.post('/register', async (req, res) => {
     try{
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        users.push({
-            id: Date.now().toString(),
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword
-        });
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    const users = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: hashedPassword
+    })
+        await users.save();
         res.redirect('/login');
-    } catch{
+    } catch(err){
+        console.log(err)
         res.redirect('/register');        
     }
 })

@@ -2,11 +2,11 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const { application } = require('express');
+const User = require('./models/user')
 
 function initialize(passport, getUserByEmail, getUserById) {
-    var authenticateUser = async (email, password, done) => {
-        const user = getUserByEmail(email);
+    const authenticateUser = async (email, password, done) => {
+        const user = await User.findOne({email: email});
         if(user==null){
             return done(null, false, {message: 'No user with that email'})
         }

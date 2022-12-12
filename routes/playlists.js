@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     const playlist = new Playlist({
         name: req.body.name,
         description: req.body.description,
-        tracks: req.body.tracks
+        privacy: req.body.privacy
     });
     try{
         const newPlaylist = await playlist.save()
@@ -61,20 +61,51 @@ router.get('/:id/edit', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id/edit', async (req, res) => {
     let playlist
-    try{
+    try {
         playlist = await Playlist.findById(req.params.id)
         playlist.name = req.body.name
+        playlist.description = req.body.description
+        playlist.privacy = req.body.privacy
         await playlist.save()
         res.redirect(`/playlists/${playlist.id}`)
     } catch {
-        if ( playlist == null ) {
+        if(playlist == null){
             res.redirect('/')
-        } else{
+        }else{
             res.render('playlists/edit', {
-                playlist: playlist, 
-                errorMessage: 'Error updating playlist'
+                playlist: playlist,
+                errorMessage: 'Error editing playlist'
+            })
+        }
+    }
+});
+
+router.get('/:id/review', async (req, res) => {
+    try{
+        const playlist = await Playlist.findById(req.params.id);
+        res.render('playlists/review', {playlist: playlist});
+    } catch {
+        res.redirect('/playlists');
+    }
+});
+
+router.put('/:id/review', async (req, res) => {
+    let playlist
+    try {
+        playlist = await Playlist.findById(req.params.id)
+        playlist.comment = req.body.comment
+        playlist.rating = req.body.rating
+        await playlist.save()
+        res.redirect(`/playlists/${playlist.id}`)
+    } catch {
+        if(playlist == null){
+            res.redirect('/')
+        }else{
+            res.render('playlists/edit', {
+                playlist: playlist,
+                errorMessage: 'Error creating review'
             })
         }
     }

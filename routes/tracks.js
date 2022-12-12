@@ -8,14 +8,21 @@ const router = express.Router();
 //all tracks route
 router.get('/', async (req, res) =>{
     let query = Track.find();
+    var spaces = /\s/g;
     if(req.query.track_title != null && req.query.track_title != '') {
-        query = query.regex('track_title', new RegExp(req.query.track_title, 'i'))
+        let tSearch = (req.query.track_title);
+        trackSearch = tSearch.replace(spaces, "");
+        query = query.regex('track_title', new RegExp(trackSearch, 'i'))
     }
     if(req.query.artist_name != null && req.query.artist_name != '') {
-        query = query.regex('artist_name', req.query.artist_name)
+        let aSearch = (req.query.artist_name);
+        artistSearch = aSearch.replace(spaces, "");
+        query = query.regex('artist_name', new RegExp(artistSearch, 'i'))
     }
     if(req.query.track_genres != null && req.query.track_genres != '') {
-        query = query.regex('track_genres', req.query.track_genres)
+        let gSearch = (req.query.track_genres);
+        genreSearch = gSearch.replace(spaces, "");
+        query = query.regex('track_genres', new RegExp(genreSearch, 'i'))
     }
     try{
         const tracks = await query.limit(20).exec();
