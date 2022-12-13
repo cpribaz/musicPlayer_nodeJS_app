@@ -89,7 +89,10 @@ app.post('/register', async (req, res) => {
         res.redirect('/login');
     } catch(err){
         console.log(err)
-        res.redirect('/register');        
+        res.render('register', {
+            errorMessage: 'User already exists'
+        });
+        
     }
 })
 
@@ -107,7 +110,7 @@ app.get('/updateProfile', (req, res) => {
     res.render('updateProfile.ejs');
 })
 
-app.post('/updateProfile', async (req, res) => {
+app.put('/updateProfile', async (req, res) => {
     try{
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         users.find(id)
@@ -142,6 +145,49 @@ app.get('/dmcaNotice', checkAuthenticated, (req, res) => {
     res.render('dmcaNotice.ejs');
 })
 
+app.get('/userToManager', checkAuthenticated, (req, res) => {
+    res.render('userToManager');
+})
+
+app.put('/admin/userToManager', async (req, res) => {
+    try {
+        userEmail = req.body.email;
+        userToManager(userEmail);
+        res.redirect('/home')
+    } catch {
+        if(user == null){
+            res.redirect('/')
+        }else{
+            res.render('home', {
+                errorMessage: 'Error upgrading user'
+            })
+        }
+    }
+});
+
+app.get('/deactivateUser', checkAuthenticated, (req, res) => {
+    res.render('deactivateUser');
+})
+
+app.delete('/admin/deactivateUser', async (req, res) => {
+    let email = req.body.email;
+    try{
+        console.log(email);
+        user = await User.findOne({email: email});
+        console.log(user);
+        await user.remove();
+        res.redirect('/admin');
+    } catch {
+        if ( user == null ) {
+            res.redirect('/')
+        } else{}
+    }
+});
+
+app.get('/admin', checkAuthenticated, (req, res) => {
+    res.render('admin');
+})
+
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()){
         return next();
@@ -150,5 +196,20 @@ function checkAuthenticated(req, res, next) {
     res.redirect('/login');
 }
 
+async function userToManager(foundUser){
+    const user = await User.findOne({email: foundUser});
+    if (user){
+        user.user_type = 'manager';
+        await user.save()
+    } else {}
+}
+
+async function deactivateUser(foundUser){
+    const user = await User.findOne({email: foundUser});
+    if (user){
+        await user.remove();
+        await user.save()
+    } else {}
+}
 
 app.listen(process.env.PORT || 3000);
